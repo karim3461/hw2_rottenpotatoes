@@ -8,6 +8,25 @@ class MoviesController < ApplicationController
 
   def index
     @movies = Movie.all
+    sort_symbol = session[:sort_by]
+    
+    unless sort_symbol.nil?
+      @movies = @movies.sort_by { |each| each.send(sort_symbol) }
+    end
+  end
+
+  def sort_title
+    session[:sort_by] = :title
+    session[:title_class] = 'hilite'
+    session[:date_class] = ''
+    redirect_to movies_path
+  end
+
+  def sort_date
+    session[:sort_by] = :release_date
+    session[:date_class] = 'hilite'
+    session[:title_class] = ''
+    redirect_to movies_path
   end
 
   def new
